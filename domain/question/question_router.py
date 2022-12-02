@@ -10,11 +10,16 @@ router = APIRouter(
 )
 
 
-@router.get("/list", response_model=list[question_schema.Question])
-def question_list(db: Session = Depends(get_db)):
+@router.get("/list", response_model=question_schema.QuestionList)
+def question_list(db: Session = Depends(get_db),
+                  page: int = 0, size: int = 10):
     # db 세션을 생성하고 해당 세션을 이용하여 질문 목록을 조회하여 리턴하는 함수
-    _question_list = question_crud.get_question_list(db)
-    return _question_list
+    total, _question_list = question_crud.get_question_list(
+        db, skip=page*size, limit=size)
+    return {
+        'total': total,
+        'question_list': _question_list
+    }
 
 
 @router.get("/detail/{question_id}", response_model=question_schema.Question)

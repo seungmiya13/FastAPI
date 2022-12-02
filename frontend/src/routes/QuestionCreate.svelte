@@ -39,4 +39,4 @@
         </div>
         <button class="btn btn-primary" on:click="{post_question}">저장하기</button>
     </form>
-</div>
+</div>``
